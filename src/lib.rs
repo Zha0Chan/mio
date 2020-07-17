@@ -2,7 +2,7 @@
 #![deny(
     missing_docs,
     missing_debug_implementations,
-    rust_2018_idioms,
+    //rust_2018_idioms,
     unused_imports,
     dead_code
 )]
@@ -57,6 +57,15 @@
     doc = "`features` (only available when the `extra-docs` feature is enabled)."
 )]
 
+#![cfg_attr(all(feature = "mesalock_sgx",
+not(target_env = "sgx")), no_std)]
+#![cfg_attr(all(target_env = "sgx", target_vendor = "mesalock"),
+feature(rustc_private))]
+#[cfg(all(feature = "mesalock_sgx", not(target_env = "sgx")))]
+#[macro_use]
+extern crate sgx_tstd as std;
+
+extern crate sgx_libc as libc;
 // macros used internally
 #[macro_use]
 mod macros;
